@@ -3,9 +3,9 @@ from django.utils import timezone
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(db_index=True, default=timezone.now)
-    updated_at = models.DateTimeField(db_index=True, auto_now=True)
-    deleted_at = models.DateTimeField(db_index=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True)
 
     @property
     def is_deleted(self):
@@ -13,3 +13,9 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+        indexes = [
+            models.Index(fields=['created_at']),
+            models.Index(fields=['updated_at']),
+            models.Index(fields=['deleted_at']),
+        ]

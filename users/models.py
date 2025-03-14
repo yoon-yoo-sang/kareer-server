@@ -5,8 +5,6 @@ from common.models import BaseModel
 
 
 class UserSetting(BaseModel):
-    __name__ = 'user_setting'
-
     user = models.OneToOneField(
         'authentication.AuthUser',
         on_delete=models.CASCADE,
@@ -16,10 +14,11 @@ class UserSetting(BaseModel):
     is_push_notification_enabled = models.BooleanField(default=True)
     language = models.CharField(max_length=10, choices=settings.LANGUAGES, default='ko')
 
+    class Meta:
+        db_table = 'user_setting'
+
 
 class UserProfile(BaseModel):
-    __name__ = 'user_profile'
-
     class UserProfileOccupationEnum(models.TextChoices):
         DEVELOPER = 'developer', '개발'
         BUSINESS = 'business', '경영/비즈니스'
@@ -48,10 +47,11 @@ class UserProfile(BaseModel):
     skills = models.JSONField(default=list)
     resume_uri = models.URLField(blank=True)
 
+    class Meta:
+        db_table = 'user_profile'
+
 
 class UserCareerExperience(BaseModel):
-    __name__ = 'user_career_experience'
-
     user = models.ForeignKey(
         'authentication.AuthUser',
         on_delete=models.CASCADE,
@@ -64,10 +64,11 @@ class UserCareerExperience(BaseModel):
     description = models.TextField(blank=True)
     is_current = models.BooleanField(default=False)
 
+    class Meta:
+        db_table = 'user_career_experience'
+
 
 class UserEducation(BaseModel):
-    __name__ = 'user_education'
-
     class DegreeEnum(models.TextChoices):
         HIGH = 'high', '고졸'
         ASSOCIATE = 'associate', '전문학사'
@@ -92,3 +93,6 @@ class UserEducation(BaseModel):
     ended_at = models.DateField(null=True)
     description = models.TextField(blank=True)
     is_current = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'user_education'

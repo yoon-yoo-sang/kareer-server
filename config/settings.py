@@ -49,6 +49,7 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     'common',
     'authentication',
+    'jobs',
     'users',
 ]
 
