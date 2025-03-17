@@ -7,6 +7,13 @@ from rest_framework.views import APIView
 from authentication.services import AuthenticationService
 
 
+class PingView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request):
+        return Response({"ping": "pong"}, status=status.HTTP_200_OK)
+
+
 class SignUpView(APIView):
     permission_classes = [AllowAny]
 
