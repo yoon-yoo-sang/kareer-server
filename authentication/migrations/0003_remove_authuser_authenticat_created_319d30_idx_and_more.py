@@ -6,24 +6,27 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authentication', '0002_alter_authuser_created_at_alter_authuser_deleted_at_and_more'),
+        (
+            "authentication",
+            "0002_alter_authuser_created_at_alter_authuser_deleted_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.RemoveIndex(
-            model_name='authuser',
-            name='authenticat_created_319d30_idx',
+            model_name="authuser",
+            name="authenticat_created_319d30_idx",
         ),
         migrations.RemoveIndex(
-            model_name='authuser',
-            name='authenticat_updated_3984dc_idx',
+            model_name="authuser",
+            name="authenticat_updated_3984dc_idx",
         ),
         migrations.RemoveIndex(
-            model_name='authuser',
-            name='authenticat_deleted_964f46_idx',
+            model_name="authuser",
+            name="authenticat_deleted_964f46_idx",
         ),
         migrations.AlterModelTable(
-            name='authuser',
-            table='user',
+            name="authuser",
+            table="user",
         ),
     ]

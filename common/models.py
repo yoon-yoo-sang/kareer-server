@@ -15,7 +15,7 @@ class BaseModel(models.Model):
         abstract = True
 
         indexes = [
-            models.Index(fields=['created_at']),
-            models.Index(fields=['updated_at']),
-            models.Index(fields=['deleted_at']),
+            models.Index(fields=["created_at"]),
+            models.Index(fields=["updated_at"]),
+            models.Index(fields=["deleted_at"]),
         ]

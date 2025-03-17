@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from authentication.models import AuthUser
 
 

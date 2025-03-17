@@ -6,8 +6,8 @@ from common.models import BaseModel
 
 class AuthUser(BaseModel, AbstractUser):
     class AuthUserSocialProviderEnum(models.TextChoices):
-        EMAIL = 'email', '이메일'
-        GOOGLE = 'google', '구글'
+        EMAIL = "email", "이메일"
+        GOOGLE = "google", "구글"
 
     first_name = None
     last_name = None
@@ -16,9 +16,9 @@ class AuthUser(BaseModel, AbstractUser):
     social_provider = models.CharField(
         max_length=50,
         choices=AuthUserSocialProviderEnum.choices,
-        default=AuthUserSocialProviderEnum.EMAIL
+        default=AuthUserSocialProviderEnum.EMAIL,
     )
     locale = models.CharField(max_length=10, blank=True)
 
     class Meta:
-        db_table = 'user'
+        db_table = "user"

@@ -6,28 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_remove_usercareerexperience_users_userc_created_50b887_idx_and_more'),
+        (
+            "users",
+            "0003_remove_usercareerexperience_users_userc_created_50b887_idx_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='usercareerexperience',
-            name='created_at',
+            model_name="usercareerexperience",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usereducation',
-            name='created_at',
+            model_name="usereducation",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='created_at',
+            model_name="userprofile",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usersetting',
-            name='created_at',
+            model_name="usersetting",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

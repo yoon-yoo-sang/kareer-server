@@ -6,50 +6,50 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jobs', '0001_initial'),
+        ("jobs", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameIndex(
-            model_name='job',
-            new_name='job_categor_55e998_idx',
-            old_name='jobs_job_categor_653d6e_idx',
+            model_name="job",
+            new_name="job_categor_55e998_idx",
+            old_name="jobs_job_categor_653d6e_idx",
         ),
         migrations.RenameIndex(
-            model_name='job',
-            new_name='job_industr_26e59e_idx',
-            old_name='jobs_job_industr_a3aeef_idx',
+            model_name="job",
+            new_name="job_industr_26e59e_idx",
+            old_name="jobs_job_industr_a3aeef_idx",
         ),
         migrations.RenameIndex(
-            model_name='job',
-            new_name='job_posted__6fe414_idx',
-            old_name='jobs_job_posted__7edcdf_idx',
+            model_name="job",
+            new_name="job_posted__6fe414_idx",
+            old_name="jobs_job_posted__7edcdf_idx",
         ),
         migrations.RenameIndex(
-            model_name='job',
-            new_name='job_is_hiri_02cb61_idx',
-            old_name='jobs_job_is_hiri_8bd55b_idx',
+            model_name="job",
+            new_name="job_is_hiri_02cb61_idx",
+            old_name="jobs_job_is_hiri_8bd55b_idx",
         ),
         migrations.RenameIndex(
-            model_name='jobapplication',
-            new_name='job_applica_applied_bb5a57_idx',
-            old_name='jobs_jobapp_applied_23c887_idx',
+            model_name="jobapplication",
+            new_name="job_applica_applied_bb5a57_idx",
+            old_name="jobs_jobapp_applied_23c887_idx",
         ),
         migrations.RenameIndex(
-            model_name='jobbookmark',
-            new_name='job_bookmar_user_id_455d0b_idx',
-            old_name='jobs_jobboo_user_id_833883_idx',
+            model_name="jobbookmark",
+            new_name="job_bookmar_user_id_455d0b_idx",
+            old_name="jobs_jobboo_user_id_833883_idx",
         ),
         migrations.AlterModelTable(
-            name='job',
-            table='job',
+            name="job",
+            table="job",
         ),
         migrations.AlterModelTable(
-            name='jobapplication',
-            table='job_application',
+            name="jobapplication",
+            table="job_application",
         ),
         migrations.AlterModelTable(
-            name='jobbookmark',
-            table='job_bookmark',
+            name="jobbookmark",
+            table="job_bookmark",
         ),
     ]

@@ -6,72 +6,72 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_usercareerexperience_created_at_and_more'),
+        ("users", "0002_alter_usercareerexperience_created_at_and_more"),
     ]
 
     operations = [
         migrations.RemoveIndex(
-            model_name='usercareerexperience',
-            name='users_userc_created_50b887_idx',
+            model_name="usercareerexperience",
+            name="users_userc_created_50b887_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usercareerexperience',
-            name='users_userc_updated_9f505b_idx',
+            model_name="usercareerexperience",
+            name="users_userc_updated_9f505b_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usercareerexperience',
-            name='users_userc_deleted_2e0579_idx',
+            model_name="usercareerexperience",
+            name="users_userc_deleted_2e0579_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usereducation',
-            name='users_usere_created_e123b0_idx',
+            model_name="usereducation",
+            name="users_usere_created_e123b0_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usereducation',
-            name='users_usere_updated_ab28ef_idx',
+            model_name="usereducation",
+            name="users_usere_updated_ab28ef_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usereducation',
-            name='users_usere_deleted_5246e6_idx',
+            model_name="usereducation",
+            name="users_usere_deleted_5246e6_idx",
         ),
         migrations.RemoveIndex(
-            model_name='userprofile',
-            name='users_userp_created_72cdd2_idx',
+            model_name="userprofile",
+            name="users_userp_created_72cdd2_idx",
         ),
         migrations.RemoveIndex(
-            model_name='userprofile',
-            name='users_userp_updated_6b3943_idx',
+            model_name="userprofile",
+            name="users_userp_updated_6b3943_idx",
         ),
         migrations.RemoveIndex(
-            model_name='userprofile',
-            name='users_userp_deleted_2b4d00_idx',
+            model_name="userprofile",
+            name="users_userp_deleted_2b4d00_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usersetting',
-            name='users_users_created_c1803c_idx',
+            model_name="usersetting",
+            name="users_users_created_c1803c_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usersetting',
-            name='users_users_updated_df4860_idx',
+            model_name="usersetting",
+            name="users_users_updated_df4860_idx",
         ),
         migrations.RemoveIndex(
-            model_name='usersetting',
-            name='users_users_deleted_3c17af_idx',
+            model_name="usersetting",
+            name="users_users_deleted_3c17af_idx",
         ),
         migrations.AlterModelTable(
-            name='usercareerexperience',
-            table='user_career_experience',
+            name="usercareerexperience",
+            table="user_career_experience",
         ),
         migrations.AlterModelTable(
-            name='usereducation',
-            table='user_education',
+            name="usereducation",
+            table="user_education",
         ),
         migrations.AlterModelTable(
-            name='userprofile',
-            table='user_profile',
+            name="userprofile",
+            table="user_profile",
         ),
         migrations.AlterModelTable(
-            name='usersetting',
-            table='user_setting',
+            name="usersetting",
+            table="user_setting",
         ),
     ]

@@ -6,35 +6,35 @@ from common.models import BaseModel
 
 class UserSetting(BaseModel):
     user = models.OneToOneField(
-        'authentication.AuthUser',
+        "authentication.AuthUser",
         on_delete=models.CASCADE,
-        related_name='setting',
+        related_name="setting",
     )
     is_email_notification_enabled = models.BooleanField(default=True)
     is_push_notification_enabled = models.BooleanField(default=True)
-    language = models.CharField(max_length=10, choices=settings.LANGUAGES, default='ko')
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES, default="ko")
 
     class Meta:
-        db_table = 'user_setting'
+        db_table = "user_setting"
 
 
 class UserProfile(BaseModel):
     class UserProfileOccupationEnum(models.TextChoices):
-        DEVELOPER = 'developer', '개발'
-        BUSINESS = 'business', '경영/비즈니스'
-        DESIGNER = 'designer', '디자인'
-        MARKETER = 'marketer', '마케팅'
-        HR = 'hr', '인사/채용'
-        FINANCE = 'finance', '재무/회계'
-        LEGAL = 'legal', '법률'
-        EDUCATION = 'education', '교육'
-        MEDICAL = 'medical', '의료'
-        OTHER = 'other', '기타'
+        DEVELOPER = "developer", "개발"
+        BUSINESS = "business", "경영/비즈니스"
+        DESIGNER = "designer", "디자인"
+        MARKETER = "marketer", "마케팅"
+        HR = "hr", "인사/채용"
+        FINANCE = "finance", "재무/회계"
+        LEGAL = "legal", "법률"
+        EDUCATION = "education", "교육"
+        MEDICAL = "medical", "의료"
+        OTHER = "other", "기타"
 
     user = models.OneToOneField(
-        'authentication.AuthUser',
+        "authentication.AuthUser",
         on_delete=models.CASCADE,
-        related_name='profile',
+        related_name="profile",
     )
     full_name = models.CharField(max_length=255, blank=True)
     nickname = models.CharField(max_length=50, blank=True)
@@ -48,14 +48,14 @@ class UserProfile(BaseModel):
     resume_uri = models.URLField(blank=True)
 
     class Meta:
-        db_table = 'user_profile'
+        db_table = "user_profile"
 
 
 class UserCareerExperience(BaseModel):
     user = models.ForeignKey(
-        'authentication.AuthUser',
+        "authentication.AuthUser",
         on_delete=models.CASCADE,
-        related_name='career_experiences',
+        related_name="career_experiences",
     )
     company_name = models.CharField(max_length=255)
     job_title = models.CharField(max_length=255)
@@ -65,22 +65,22 @@ class UserCareerExperience(BaseModel):
     is_current = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'user_career_experience'
+        db_table = "user_career_experience"
 
 
 class UserEducation(BaseModel):
     class DegreeEnum(models.TextChoices):
-        HIGH = 'high', '고졸'
-        ASSOCIATE = 'associate', '전문학사'
-        BACHELOR = 'bachelor', '학사'
-        MASTER = 'master', '석사'
-        DOCTORATE = 'doctorate', '박사'
-        OTHER = 'other', '기타'
+        HIGH = "high", "고졸"
+        ASSOCIATE = "associate", "전문학사"
+        BACHELOR = "bachelor", "학사"
+        MASTER = "master", "석사"
+        DOCTORATE = "doctorate", "박사"
+        OTHER = "other", "기타"
 
     user = models.ForeignKey(
-        'authentication.AuthUser',
+        "authentication.AuthUser",
         on_delete=models.CASCADE,
-        related_name='educations',
+        related_name="educations",
     )
     school_name = models.CharField(max_length=255)
     major = models.CharField(max_length=255)
@@ -95,4 +95,4 @@ class UserEducation(BaseModel):
     is_current = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'user_education'
+        db_table = "user_education"
