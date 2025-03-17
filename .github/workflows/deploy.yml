@@ -21,6 +21,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USERNAME }}@${{ secrets.AWS_HOST }} '
             cd ~/app &&
+            cd kareer-server &&
             git pull origin main &&
             docker-compose build &&
             docker-compose down &&
