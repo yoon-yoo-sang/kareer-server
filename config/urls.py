@@ -17,20 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
-from rest_framework_simplejwt.views import TokenRefreshView
-
-from authentication.views import SignUpView, SignInView
 
 urlpatterns = [
+    # Authentication
+    path('', include(('authentication.urls', 'auth'), namespace='auth')),
+
+    # Users
+    path('', include(('users.urls', 'users'), namespace='users')),
+
     # Django admin
     path('admin/', admin.site.urls),
-    path('api-authentication/', include('rest_framework.urls')),
 
     # static files
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico')),
-
-    # authentication
-    path('sign-up', SignUpView.as_view(), name='sign-up'),
-    path('sign-in', SignInView.as_view(), name='sign-in'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

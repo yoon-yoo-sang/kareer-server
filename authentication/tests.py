@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from authentication.models import AuthUser
 
 
-class SocialSignUpTest(APITestCase):
+class AuthenticationTest(APITestCase):
     def setUp(self):
         self.social_user = AuthUser.objects.create_user(
             username='google_123456',
@@ -24,7 +24,7 @@ class SocialSignUpTest(APITestCase):
         )
 
     def test_social_sign_up_success(self):
-        url = reverse('sign-up')
+        url = reverse('auth:sign-up')
         data = {
             'social_id': '1234567890',
             'social_provider': 'google',
@@ -43,7 +43,7 @@ class SocialSignUpTest(APITestCase):
 
 
     def test_email_sign_up_success(self):
-        url = reverse('sign-up')
+        url = reverse('auth:sign-up')
         data = {
             'email': 'yysss61888@gmail.com',
             'password': 'password',
@@ -60,7 +60,7 @@ class SocialSignUpTest(APITestCase):
         self.assertEqual(user.social_provider, 'email')
 
     def test_social_sign_in_success(self):
-        url = reverse('sign-in')
+        url = reverse('auth:sign-in')
         data = {
             'social_id': '123456',
         }
@@ -71,7 +71,7 @@ class SocialSignUpTest(APITestCase):
         self.assertIn('refresh_token', response.data)
 
     def test_email_sign_in_success(self):
-        url = reverse('sign-in')
+        url = reverse('auth:sign-in')
         data = {
             'email': 'yys618@naver.com',
             'password': 'password',

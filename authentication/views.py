@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,7 +11,7 @@ from authentication.services import AuthenticationService
 class SignUpView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request: Request):
         try:
             tokens = AuthenticationService().signup(**request.data)
             return Response(tokens, status=status.HTTP_201_CREATED)
@@ -21,7 +22,7 @@ class SignUpView(APIView):
 class SignInView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request: Request):
         try:
             tokens = AuthenticationService().authenticate(**request.data)
             return Response(tokens, status=status.HTTP_200_OK)

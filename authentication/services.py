@@ -1,5 +1,6 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from authentication.models import AuthUser
 from authentication.strategies import EmailAuthenticationStrategy, SocialAuthenticationStrategy
 
 
@@ -19,7 +20,7 @@ class AuthenticationService:
             raise ValueError('사용자 인증에 필요한 정보가 부족합니다')
 
     @staticmethod
-    def generate_token(user):
+    def generate_token(user: AuthUser):
         refresh = RefreshToken.for_user(user)
         return {
             'access_token': str(refresh.access_token),
