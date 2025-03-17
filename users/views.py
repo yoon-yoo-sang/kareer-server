@@ -101,7 +101,6 @@ class MyWholeCareerView(APIView):
     def patch(self, request: Request):
         services = UserWholeCareerServices(self.request.user.id)
         updated_data = services.update_user_whole_career(request.data)
-
         serializer = UserWholeCareerSerializer(updated_data)
         return Response(serializer.data)
 

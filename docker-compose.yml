@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mysql:8.0.35
+    container_name: mysql
+    ports:
+      - 3306:3306
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Seoul
+
+  web:
+    image: django:5.1
+    container_name: django
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db

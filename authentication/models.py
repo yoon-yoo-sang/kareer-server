@@ -22,3 +22,4 @@ class AuthUser(BaseModel, AbstractUser):
 
     class Meta:
         db_table = "user"
+        indexes = [models.Index(fields=["social_id", "social_provider"])]

@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from authentication.services import AuthenticationService
 
 
-# Create your views here.
 class SignUpView(APIView):
     permission_classes = [AllowAny]
 
