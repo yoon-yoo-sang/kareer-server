@@ -1,6 +1,7 @@
 from authentication.interfaces import AuthenticationStrategyInterface
 from authentication.models import AuthUser
-from common.errors import (AUTH_USER_ALREADY_EXISTS, EMAIL_ALREADY_EXISTS, EMAIL_OR_PASSWORD_INCORRECT)
+from common.errors import (AUTH_USER_ALREADY_EXISTS, EMAIL_ALREADY_EXISTS,
+                           EMAIL_OR_PASSWORD_INCORRECT)
 from common.utils import get_object_or_404_response
 
 

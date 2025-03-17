@@ -79,12 +79,18 @@ class JobsTest(APITestCase):
         job_count = 3
         self.authenticate()
 
-        response = self.client.get(f"/jobs/jobs?limit={job_count}&offset=0&order_by=recommended&search=Software", follow=True)
+        response = self.client.get(
+            f"/jobs/jobs?limit={job_count}&offset=0&order_by=recommended&search=Software",
+            follow=True,
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), job_count)
         self.assertEqual(response.data["results"][0]["id"], self.most_bookmarked_job.id)
 
-        response = self.client.get(f"/jobs/jobs?limit={job_count}&offset=0&order_by=recently&search=Software", follow=True)
+        response = self.client.get(
+            f"/jobs/jobs?limit={job_count}&offset=0&order_by=recently&search=Software",
+            follow=True,
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), job_count)
         self.assertEqual(response.data["results"][0]["id"], self.most_recent_job.id)
@@ -96,4 +102,3 @@ class JobsTest(APITestCase):
     def authenticate(self):
         token = RefreshToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token.access_token}")
-

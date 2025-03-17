@@ -6,10 +6,12 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from common.errors import (USER_PROFILE_ALREADY_EXISTS, USER_SETTING_ALREADY_EXISTS)
+from common.errors import (USER_PROFILE_ALREADY_EXISTS,
+                           USER_SETTING_ALREADY_EXISTS)
 from common.utils import get_object_or_404_response
-from jobs.models import Job, JobBookmark, JobApplication
-from jobs.serializers import JobSerializer, JobApplicationSerializer, JobBookmarkSerializer
+from jobs.models import Job, JobApplication, JobBookmark
+from jobs.serializers import (JobApplicationSerializer, JobBookmarkSerializer,
+                              JobSerializer)
 from users.models import UserProfile, UserSetting
 from users.serializers import (UserProfileSerializer, UserSerializer,
                                UserSettingSerializer,
@@ -117,7 +119,9 @@ class MyBookmarkedJobsView(APIView):
         user = self.request.user
         job = Job.objects.get(id=request.data["job_id"])
 
-        if JobBookmark.objects.filter(user=user, job=job, deleted_at__isnull=True).exists():
+        if JobBookmark.objects.filter(
+            user=user, job=job, deleted_at__isnull=True
+        ).exists():
             return Response(
                 {"detail": "이미 북마크한 채용공고입니다."},
                 status=status.HTTP_400_BAD_REQUEST,

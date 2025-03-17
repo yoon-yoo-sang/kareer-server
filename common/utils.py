@@ -7,4 +7,6 @@ def get_object_or_404_response(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
     except model.DoesNotExist:
-        raise NotFound(f"{OBJECT_DOES_NOT_EXIST}: cls name: {model.__name__}, kwargs: {kwargs}")
+        raise NotFound(
+            f"{OBJECT_DOES_NOT_EXIST}: cls name: {model.__name__}, kwargs: {kwargs}"
+        )

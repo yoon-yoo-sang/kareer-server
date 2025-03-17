@@ -81,7 +81,12 @@ class UsersTest(APITestCase):
             company_name="company",
             location="location",
             requirements=["requirements"],
-            salary_range={"min": 40000, "max": 70000, "currency": "USD", "period": "yearly"},
+            salary_range={
+                "min": 40000,
+                "max": 70000,
+                "currency": "USD",
+                "period": "yearly",
+            },
             category="full_time",
             industry="internet",
             posted_at=timezone.now(),
@@ -277,7 +282,6 @@ class UsersTest(APITestCase):
 
         response = self.client.post(url, {"job_id": self.job.id})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
