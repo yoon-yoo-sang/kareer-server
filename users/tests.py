@@ -1,11 +1,13 @@
 import datetime
 
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from authentication.models import AuthUser
+from jobs.models import Job
 from users.models import UserCareerExperience, UserEducation, UserProfile
 
 
@@ -73,9 +75,18 @@ class UsersTest(APITestCase):
             ),
         ]
 
-    def authenticate(self):
-        token = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token.access_token}")
+        self.job = Job.objects.create(
+            title="title",
+            description="description",
+            company_name="company",
+            location="location",
+            requirements=["requirements"],
+            salary_range={"min": 40000, "max": 70000, "currency": "USD", "period": "yearly"},
+            category="full_time",
+            industry="internet",
+            posted_at=timezone.now(),
+            expired_at=None,
+        )
 
     def test_get_and_patch_user_success(self):
         url = reverse("users:me")
@@ -255,6 +266,57 @@ class UsersTest(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_my_bookmarked_jobs_success(self):
+        url = reverse("users:me-bookmarked-jobs")
+        self.authenticate()
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        response = self.client.post(url, {"job_id": self.job.id})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+        response = self.client.delete(url, {"job_id": self.job.id})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+    def test_my_bookmarked_jobs_fail(self):
+        url = reverse("users:me-bookmarked-jobs")
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.post(url, {"job_id": self.job.id})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.delete(url + f"?job_id={self.job.id}")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_my_job_applications_success(self):
+        url = reverse("users:me-job-applications")
+        self.authenticate()
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        response = self.client.post(url, {"job_id": self.job.id})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["job"], self.job.id)
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
 
     def authenticate(self):
         token = RefreshToken.for_user(self.user)

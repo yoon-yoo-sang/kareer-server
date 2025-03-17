@@ -81,10 +81,8 @@ class JobApplication(BaseModel):
 
 
 class JobBookmark(BaseModel):
-    __name__ = "job_bookmark"
-
-    user = models.ForeignKey("authentication.AuthUser", on_delete=models.CASCADE)
-    job = models.ForeignKey("jobs.Job", on_delete=models.CASCADE)
+    user = models.ForeignKey("authentication.AuthUser", on_delete=models.CASCADE, related_name="bookmarks")
+    job = models.ForeignKey("jobs.Job", on_delete=models.CASCADE, related_name="bookmarks")
     bookmarked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

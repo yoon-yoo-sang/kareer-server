@@ -21,9 +21,11 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     # Authentication
-    path("", include(("authentication.urls", "auth"), namespace="auth")),
+    path("auth/", include(("authentication.urls", "auth"), namespace="auth")),
     # Users
-    path("", include(("users.urls", "users"), namespace="users")),
+    path("users/", include(("users.urls", "users"), namespace="users")),
+    # Jobs
+    path("jobs/", include(("jobs.urls", "jobs"), namespace="jobs")),
     # Django admin
     path("admin/", admin.site.urls),
     # static files

@@ -1,8 +1,13 @@
-AUTH_USER_NOT_FOUND = "User가 존재하지 않음"
+# Description: Error Message를 정의한 파일
+
+# Not Found
+OBJECT_DOES_NOT_EXIST = "Object가 존재하지 않음"
+
+# Invalid
+EMAIL_OR_PASSWORD_INCORRECT = "이메일 또는 비밀번호가 올바르지 않습니다"
+
+# Already Exists
 AUTH_USER_ALREADY_EXISTS = "User는 이미 존재함"
 EMAIL_ALREADY_EXISTS = "이미 가입된 이메일입니다"
-EMAIL_OR_PASSWORD_INCORRECT = "이메일 또는 비밀번호가 올바르지 않습니다"
-USER_PROFILE_NOT_FOUND = "UserProfile이 존재하지 않음"
 USER_PROFILE_ALREADY_EXISTS = "UserProfile은 이미 존재함"
-USER_SETTING_NOT_FOUND = "UserSetting이 존재하지 않음"
 USER_SETTING_ALREADY_EXISTS = "UserSetting은 이미 존재함"

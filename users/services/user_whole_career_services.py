@@ -1,6 +1,7 @@
 from django.utils import timezone
 
 from authentication.models import AuthUser
+from common.utils import get_object_or_404_response
 from users.models import UserCareerExperience, UserEducation, UserProfile
 from users.serializers import (UserCareerExperienceSerializer,
                                UserEducationSerializer, UserProfileSerializer)
@@ -12,10 +13,7 @@ class UserWholeCareerServices:
 
     def get_user_whole_career(self):
         user = AuthUser.objects.get(id=self.user_id)
-        try:
-            user_profile = UserProfile.objects.get(user=user)
-        except UserProfile.DoesNotExist:
-            raise UserProfile.DoesNotExist
+        user_profile = get_object_or_404_response(UserProfile, user=user)
         user_carrier_experiences = UserCareerExperience.objects.filter(
             user=user, deleted_at__isnull=True
         )
@@ -41,7 +39,7 @@ class UserWholeCareerServices:
 
     def update_user_whole_career(self, request_data):
         user = AuthUser.objects.get(id=self.user_id)
-        user_profile = UserProfile.objects.get(user=user)
+        user_profile = get_object_or_404_response(UserProfile, user=user)
         user_carrier_experiences = UserCareerExperience.objects.filter(
             user=user, deleted_at__isnull=True
         )
