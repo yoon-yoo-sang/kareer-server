@@ -38,5 +38,4 @@ class JobSearchService:
 
     def get_recommended_count_of_jobs(self):
         # TODO: 추천 로직 고도화
-        self.queryset = self.queryset.prefetch_related("bookmarks")
         self.queryset = self.queryset.annotate(recommended_count=Count("bookmarks"))
