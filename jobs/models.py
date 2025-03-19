@@ -41,7 +41,7 @@ class Job(BaseModel):
         max_length=50, choices=IndustryEnum.choices, default=IndustryEnum.OTHER
     )
     posted_at = models.DateTimeField(auto_now_add=True)
-    expired_at = models.DateTimeField(null=True, blank=True)
+    expired_at = models.DateTimeField(null=True)
     is_hiring = models.BooleanField(default=True)
 
     class Meta:
@@ -50,6 +50,7 @@ class Job(BaseModel):
             models.Index(fields=["category"]),
             models.Index(fields=["industry"]),
             models.Index(fields=["posted_at"]),
+            models.Index(fields=["expired_at"]),
             models.Index(fields=["is_hiring"]),
         ]
 
