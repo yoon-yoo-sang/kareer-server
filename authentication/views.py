@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 
 from authentication.services import AuthenticationService
 
+SERVICE = AuthenticationService()
+
 
 class PingView(APIView):
     permission_classes = [AllowAny]
@@ -19,7 +21,7 @@ class SignUpView(APIView):
 
     def post(self, request: Request):
         try:
-            tokens = AuthenticationService().signup(**request.data)
+            tokens = SERVICE.signup(**request.data)
             return Response(tokens, status=status.HTTP_201_CREATED)
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -30,7 +32,7 @@ class SignInView(APIView):
 
     def post(self, request: Request):
         try:
-            tokens = AuthenticationService().authenticate(**request.data)
+            tokens = SERVICE.authenticate(**request.data)
             return Response(tokens, status=status.HTTP_200_OK)
         except ValueError as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
