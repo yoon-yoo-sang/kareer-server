@@ -43,6 +43,12 @@ class Job(BaseModel):
     posted_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField(null=True)
     is_hiring = models.BooleanField(default=True)
+    created_by = models.ForeignKey(
+        "authentication.AuthUser",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="created_jobs",
+    )
 
     class Meta:
         db_table = "job"
@@ -52,6 +58,7 @@ class Job(BaseModel):
             models.Index(fields=["posted_at"]),
             models.Index(fields=["expired_at"]),
             models.Index(fields=["is_hiring"]),
+            models.Index(fields=["created_by"]),
         ]
 
 
@@ -95,4 +102,51 @@ class JobBookmark(BaseModel):
         unique_together = ("user", "job")
         indexes = [
             models.Index(fields=["user", "bookmarked_at"]),
+        ]
+
+
+class JobPostingRequest(BaseModel):
+    class StatusEnum(models.TextChoices):
+        PENDING = "pending", "대기중"
+        APPROVED = "approved", "승인됨"
+        REJECTED = "rejected", "거절됨"
+
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    company_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    requirements = models.JSONField(default=list)
+    salary_range = models.JSONField(default=dict, blank=True)
+    category = models.CharField(
+        max_length=50, choices=Job.CategoryEnum.choices, default=Job.CategoryEnum.OTHER
+    )
+    industry = models.CharField(
+        max_length=50, choices=Job.IndustryEnum.choices, default=Job.IndustryEnum.OTHER
+    )
+    status = models.CharField(
+        max_length=50, choices=StatusEnum.choices, default=StatusEnum.PENDING
+    )
+    requested_by = models.ForeignKey(
+        "authentication.AuthUser",
+        on_delete=models.CASCADE,
+        related_name="job_posting_requests",
+    )
+    reviewed_by = models.ForeignKey(
+        "authentication.AuthUser",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="reviewed_job_posting_requests",
+    )
+    review_comment = models.TextField(blank=True)
+    reviewed_at = models.DateTimeField(null=True)
+    created_job = models.OneToOneField(
+        "jobs.Job", on_delete=models.SET_NULL, null=True, related_name="posting_request"
+    )
+
+    class Meta:
+        db_table = "job_posting_request"
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["requested_by"]),
+            models.Index(fields=["reviewed_by"]),
         ]
