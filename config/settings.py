@@ -9,9 +9,11 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MODE = os.getenv("MODE")
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+DEBUG = True if MODE == "dev" else False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -22,8 +24,14 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "rest_framework",
 ]
+
+if DEBUG:
+    DJANGO_APPS += [
+        "silk",
+    ]
 
 LOCAL_APPS = [
     "common",
@@ -45,6 +53,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += [
+        "silk.middleware.SilkyMiddleware",
+    ]
 
 ROOT_URLCONF = "config.urls"
 

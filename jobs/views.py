@@ -1,7 +1,8 @@
 from django.db import transaction
 from django.utils import timezone
-from rest_framework import viewsets, status
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin
+from rest_framework import status, viewsets
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   ListModelMixin, RetrieveModelMixin)
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.request import Request
@@ -21,7 +22,7 @@ class JobViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin):
 
     def get_queryset(self):
         return Job.objects.filter(deleted_at__isnull=True)
-    
+
     def get_serializer_class(self):
         if self.request.user.is_staff:
             if self.action not in SAFE_METHODS:
@@ -51,6 +52,7 @@ class JobViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin):
         serializer = JobSerializer(queryset, many=True)
         return self.get_paginated_response(serializer.data)
 
+
 class JobPostingRequestViewSet(viewsets.GenericViewSet, CreateModelMixin):
     queryset = JobPostingRequest.objects.all()
     serializer_class = JobPostingRequestSerializer
@@ -59,7 +61,9 @@ class JobPostingRequestViewSet(viewsets.GenericViewSet, CreateModelMixin):
         serializer.save(requested_by=self.request.user)
 
 
-class JobBookmarkViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, DestroyModelMixin):
+class JobBookmarkViewSet(
+    viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, DestroyModelMixin
+):
     queryset = JobBookmark.objects.all()
     serializer_class = JobBookmarkSerializer
 
@@ -96,7 +100,9 @@ class JobBookmarkViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMix
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class JobApplicationViewSet(viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, DestroyModelMixin):
+class JobApplicationViewSet(
+    viewsets.GenericViewSet, ListModelMixin, CreateModelMixin, DestroyModelMixin
+):
     queryset = JobApplication.objects.all()
     serializer_class = JobApplicationSerializer
 
