@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from authentication.services import AuthenticationService
+from .tasks import pong
 
 SERVICE = AuthenticationService()
 
@@ -13,6 +14,7 @@ class PingView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request):
+        pong.delay()
         return Response({"ping": "pong"}, status=status.HTTP_200_OK)
 
 

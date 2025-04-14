@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:8.0.35
@@ -7,10 +9,23 @@ services:
     env_file:
       - .env
     environment:
-      TZ: Asia/Seoul
+      - TZ=Asia/Seoul
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+
+  redis:
+    restart: unless-stopped
+    image: redis:7.0.5-alpine
+    expose:
+      - 6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
 
   web:
-    image: django:5.1
     container_name: django
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -20,3 +35,44 @@ services:
       - 8000:8000
     depends_on:
       - db
+      - redis
+    networks:
+      - backend
+
+  worker:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: celery -A config worker -l INFO
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+    networks:
+      - backend
+
+  beat:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: celery -A config beat --loglevel=INFO
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - worker
+    networks:
+      - backend
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  backend:
+    driver: bridge

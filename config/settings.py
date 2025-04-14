@@ -142,3 +142,28 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery
+CELERY_TIMEZONE = "Asia/Seoul"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+
+# Celery Beat 설정 (주기적 작업을 위한)
+CELERY_BEAT_SCHEDULE = {
+    'ping': {
+        'task': 'authentication.tasks.pong',
+        'schedule': 5,
+    },
+}
+
+# Celery 성능 최적화 설정
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 50
+CELERY_WORKER_SEND_TASK_EVENTS = True
+CELERY_TASK_SEND_SENT_EVENT = True
+
+# Redis 관련 추가 설정
+CELERY_REDIS_MAX_CONNECTIONS = 20
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
