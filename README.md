@@ -1,53 +1,38 @@
 # 🚀 Kareer API Server
 
-한국에서 직업을 얻고 싶은 외국인들을 도와주는 프로젝트 Kareer의 API 및 웹소켓 서버입니다. 개발 진행중이며, 2025년 4월 중에 어플 출시를 목표로 하고 있습니다.
+[한국어](#korean) | [English](#english)
 
-## 📋 목차
+# Korean
 
-- [소개](#소개)
-- [기술 스택](#기술-스택)
-- [시작하기](#시작하기)
-- [프로젝트 구조](#프로젝트-구조)
-- [API 문서](#api-문서)
-- [개발 가이드](#개발-가이드)
-- [배포](#배포)
-- [기여하기](#기여하기)
-- [만드는 이](#만드는-이)
-- [라이센스](#라이센스)
+한국에서 직업을 찾는 외국인들을 위한 Kareer 플랫폼의 API 및 웹소켓 서버입니다. 현재 개발 진행 중이며 2025년 4월 출시를 목표로 하고 있습니다.
 
-## 🎯 소개
-
-Kareer는 한국에서 취업을 희망하는 외국인들을 위한 종합 취업 플랫폼입니다. 이 저장소는 Kareer의 백엔드 API 서버를 포함하고 있습니다.
-
-### 주요 기능
+## 🌟 주요 기능
 
 - 사용자 인증 및 권한 관리
-- 이력서 관리
+- 이력서 관리 시스템
 - 채용 정보 검색 및 필터링
 - 실시간 채용 알림
 - 기업-구직자 매칭 시스템
+- 다국어 지원 (한국어/영어)
+- AI 기반 한국 생활/문화 인사이트 제공
 
-## 🛠️ 기술 스택
+## 🛠 기술 스택
 
-### Backend
+### 백엔드
 
-- **Framework:** Django 5.1.7, Django Rest Framework 3.15.2
-- **Database:** MySQL (AWS RDS)
-- **Authentication:** JWT (SimpleJWT 5.5.0)
-- **API Documentation:** Swagger/ReDoc (Coming Soon)
+- **프레임워크:** Django 5.1.7, Django REST Framework 3.15.2
+- **데이터베이스:** MySQL (AWS RDS)
+- **캐시:** Redis
+- **태스크 큐:** Celery
+- **인증:** JWT (SimpleJWT 5.5.0)
+- **API 문서:** Swagger/ReDoc
 
-### DevOps
+### 데브옵스 & 인프라
 
-- **Containerization:** Docker, Docker Compose
+- **컨테이너화:** Docker, Docker Compose
 - **CI/CD:** GitHub Actions
-- **Cloud:** AWS (RDS, EC2, S3)
-
-### 개발 도구
-
-- **Code Formatting:** Black, isort
-- **Testing:** Django Test Framework
-- **Version Control:** Git
-- **Environment Management:** python-dotenv
+- **클라우드 서비스:** AWS (EC2, RDS, S3)
+- **모니터링:** Django Silk
 
 ## 🚀 시작하기
 
@@ -100,17 +85,32 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Docker를 이용한 실행
+### Docker 실행
 
 ```bash
 docker-compose up --build
+```
+
+## 📚 API 문서
+
+- Swagger UI: `http://localhost:8000/swagger/`
+
+## 🧪 테스트
+
+```bash
+# 전체 테스트 실행
+python manage.py test
+
+# 커버리지 테스트 실행
+coverage run manage.py test
+coverage report
 ```
 
 ## 📁 프로젝트 구조
 
 ```
 .
-├── authentication          # 인증 관련 기능
+├── authentication/         # 인증 관련 기능
 │   ├── admin.py
 │   ├── models.py
 │   ├── interfaces.py      # 인터페이스 정의
@@ -119,84 +119,41 @@ docker-compose up --build
 │   ├── views.py
 │   ├── urls.py
 │   └── tests.py
-├── common                 # 공통 유틸리티
+├── common/                # 공통 유틸리티
 │   ├── models.py
 │   ├── utils.py
 │   └── errors.py
-├── users                 # 사용자 관리
+├── insights/             # AI 기반 인사이트 수집/제공
+│   ├── models.py
+│   ├── tasks.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── processors/       # GPT 기반 텍스트 처리
+│   └── crawlers/         # 데이터 수집
+├── users/                 # 사용자 관리
 │   ├── admin.py
 │   ├── models.py
 │   ├── serializers.py
-│   ├── services
+│   ├── services/
 │   │   └── user_whole_career_services.py
 │   ├── views.py
 │   ├── urls.py
 │   └── tests.py
-├── jobs                  # 채용 정보 관리
+├── jobs/                  # 채용 정보 관리
 │   ├── admin.py
 │   ├── models.py
 │   ├── serializers.py
-│   ├── services
+│   ├── services/
 │   │   └── job_search_services.py
 │   ├── views.py
 │   ├── urls.py
 │   └── tests.py
-└── config               # 프로젝트 설정
+└── config/               # 프로젝트 설정
     ├── asgi.py
     ├── wsgi.py
     ├── settings.py
     └── urls.py
 ```
-
-## 📚 API 문서
-
-API 문서는 Swagger/ReDoc을 통해 제공될 예정입니다. (개발 중)
-
-- Swagger UI: `http://localhost:8000/api/docs/`
-- ReDoc: `http://localhost:8000/api/redoc/`
-
-## 💻 개발 가이드
-
-### 코드 스타일
-
-- Black을 사용한 코드 포맷팅
-- isort를 사용한 import 정렬
-- Type hints 사용 권장
-
-### 테스트
-
-```bash
-# 전체 테스트 실행
-python manage.py test
-
-# 특정 앱의 테스트 실행
-python manage.py test users
-```
-
-### 브랜치 전략
-
-- main: 프로덕션 환경
-- develop: 개발 환경
-- feature/\*: 새로운 기능 개발
-- bugfix/\*: 버그 수정
-
-## 🚀 배포
-
-### Docker를 이용한 배포
-
-```bash
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### 환경 변수 설정
-
-프로덕션 환경에서는 다음 환경 변수들이 필요합니다:
-
-- `DJANGO_SETTINGS_MODULE`
-- `SECRET_KEY`
-- `DATABASE_URL`
-- `ALLOWED_HOSTS`
-- `DEBUG`
 
 ## 🤝 기여하기
 
@@ -206,13 +163,173 @@ docker-compose -f docker-compose.prod.yml up -d
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 👩‍💻 만드는 이
+## 📜 라이선스
 
-윤유상 - Backend Developer
+이 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+---
 
-## 📄 라이센스
+# English
 
-이 프로젝트는 MIT 라이센스를 따릅니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+API and WebSocket server for Kareer, a platform helping foreigners find jobs in Korea. Currently under development with a target launch date of April 2025.
+
+## 🌟 Features
+
+- User authentication and authorization
+- Resume management
+- Job posting search with advanced filtering
+- Real-time job notifications
+- Company-candidate matching system
+- Multi-language support (KR/EN)
+- AI-powered Korean life/culture insights
+
+## 🛠 Tech Stack
+
+### Backend
+
+- **Framework:** Django 5.1.7, Django REST Framework 3.15.2
+- **Database:** MySQL (AWS RDS)
+- **Cache:** Redis
+- **Task Queue:** Celery
+- **Authentication:** JWT (SimpleJWT 5.5.0)
+- **API Documentation:** Swagger/ReDoc
+
+### DevOps & Infrastructure
+
+- **Containerization:** Docker, Docker Compose
+- **CI/CD:** GitHub Actions
+- **Cloud Services:** AWS (EC2, RDS, S3)
+- **Monitoring:** Django Silk
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- Docker & Docker Compose
+- MySQL 8.0+
+
+### Local Development Setup
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/kareer-server.git
+cd kareer-server
+```
+
+2. Create and activate virtual environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# or
+.venv\Scripts\activate  # Windows
+```
+
+3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Set up environment variables
+
+```bash
+cp .env.example .env
+# Edit .env file with your configurations
+```
+
+5. Run database migrations
+
+```bash
+python manage.py migrate
+```
+
+6. Start development server
+
+```bash
+python manage.py runserver
+```
+
+### Docker Setup
+
+```bash
+docker-compose up --build
+```
+
+## 📚 API Documentation
+
+- Swagger UI: `http://localhost:8000/swaggers/`
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+python manage.py test
+
+# Run tests with coverage
+coverage run manage.py test
+coverage report
+```
+
+## 📁 Project Structure
+
+```
+.
+├── authentication/         # Authentication related features
+│   ├── admin.py
+│   ├── models.py
+│   ├── interfaces.py      # Interface definitions
+│   ├── strategies.py      # Authentication strategy patterns
+│   ├── serializers.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── common/                # Common utilities
+│   ├── models.py
+│   ├── utils.py
+│   └── errors.py
+├── insights/             # AI-powered insight collection/provision
+│   ├── models.py
+│   ├── tasks.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── processors/       # GPT-based text processing
+│   └── crawlers/         # Data collection
+├── users/                 # User management
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── user_whole_career_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── jobs/                  # Job posting management
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── job_search_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+└── config/               # Project configuration
+    ├── asgi.py
+    ├── wsgi.py
+    ├── settings.py
+    └── urls.py
+```
+
+## 🤝 Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

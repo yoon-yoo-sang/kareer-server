@@ -1,23 +1,12 @@
 import asyncio
 import os
-from dataclasses import dataclass
 
 import httpx
 from dotenv import load_dotenv
 
-from insights.crawlers.base_crawler import BaseCrawler
+from insights.crawlers.base_crawler import BaseCrawler, CrawlTemplate
 
 load_dotenv()
-
-
-@dataclass
-class GoogleCrawlTemplate:
-    search_word: str
-    link: str
-    html: str = ""
-
-    def __repr__(self):
-        return f"search_word: {self.search_word}, link: {self.link}\n"
 
 
 class GoogleCrawler(BaseCrawler):
@@ -35,7 +24,7 @@ class GoogleCrawler(BaseCrawler):
             cls._instance.search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
         return cls._instance
 
-    async def google_crawl_async(self, query: str, **params) -> list[GoogleCrawlTemplate]:
+    async def google_crawl_async(self, query: str, **params) -> list[CrawlTemplate]:
         """
         Google Custom Search API를 사용하여 검색 결과를 가져오고,
         해당 링크를 크롤링합니다.
@@ -46,7 +35,7 @@ class GoogleCrawler(BaseCrawler):
         google_response = await self.google_search_async(query, **params)
         links = self.get_links(google_response)
 
-        crawl_templates = [GoogleCrawlTemplate(query, link, "") for link in links]
+        crawl_templates = [CrawlTemplate(query, link, "") for link in links]
 
         async with httpx.AsyncClient() as client:
             tasks = [

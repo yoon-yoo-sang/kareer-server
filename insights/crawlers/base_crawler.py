@@ -1,6 +1,18 @@
+from dataclasses import dataclass
+
 import httpx
 
 from common.errors import CrawlError
+
+
+@dataclass
+class CrawlTemplate:
+    search_word: str
+    link: str
+    html: str = ""
+
+    def __repr__(self):
+        return f"search_word: {self.search_word}, link: {self.link}\n"
 
 
 class BaseCrawler(object):

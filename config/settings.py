@@ -38,6 +38,7 @@ LOCAL_APPS = [
     "authentication",
     "jobs",
     "users",
+    "insights",
 ]
 
 

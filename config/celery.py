@@ -1,6 +1,7 @@
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -16,6 +17,12 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
+app.conf.beat_schedule = {
+    "daily-insight-collection": {
+        "task": "insights.tasks.daily_insight_collection",
+        "schedule": crontab(hour=0, minute=0),  # 매일 자정에 실행
+    },
+}
 
 @app.task(bind=True, ignore_result=True)
 def debug_task(self):
