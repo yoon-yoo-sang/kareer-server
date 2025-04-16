@@ -151,14 +151,6 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
 
-# Celery Beat 설정 (주기적 작업을 위한)
-CELERY_BEAT_SCHEDULE = {
-    'ping': {
-        'task': 'authentication.tasks.pong',
-        'schedule': 5,
-    },
-}
-
 # Celery 성능 최적화 설정
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 50

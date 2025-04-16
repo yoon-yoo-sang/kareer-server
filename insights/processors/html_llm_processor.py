@@ -1,11 +1,11 @@
 import os
 
 import openai
+import tiktoken
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.responses import Response
-from bs4 import BeautifulSoup
-import tiktoken
 
 from insights.processors.base_processors import BaseProcessor
 
@@ -27,30 +27,6 @@ class GptProcessor(BaseProcessor):
         self.max_tokens = max_tokens
         self.encoding = tiktoken.encoding_for_model(model)
 
-    def _preprocess_html(self, html: str) -> str:
-        """
-        HTML을 전처리하여 텍스트만 추출하고 토큰 수를 제한합니다.
-        :param html: HTML 문자열
-        :return: 전처리된 텍스트
-        """
-        # HTML 파싱
-        soup = BeautifulSoup(html, 'html.parser')
-        
-        # 불필요한 태그 제거
-        for tag in soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
-            tag.decompose()
-            
-        # 텍스트 추출 및 정리
-        text = ' '.join(soup.stripped_strings)
-        text = ' '.join(text.split())
-        
-        # 토큰 수 제한
-        tokens = self.encoding.encode(text)
-        if len(tokens) > self.max_tokens:
-            text = self.encoding.decode(tokens[:self.max_tokens])
-            
-        return text
-
     def process(self, data: str):
         """
         데이터를 처리하고 결과를 반환합니다.
@@ -63,6 +39,30 @@ class GptProcessor(BaseProcessor):
             return openai_response.output_text
         else:
             raise ValueError("No response from OpenAI API or invalid response format.")
+
+    def _preprocess_html(self, html: str) -> str:
+        """
+        HTML을 전처리하여 텍스트만 추출하고 토큰 수를 제한합니다.
+        :param html: HTML 문자열
+        :return: 전처리된 텍스트
+        """
+        # HTML 파싱
+        soup = BeautifulSoup(html, 'html.parser')
+
+        # 불필요한 태그 제거
+        for tag in soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
+            tag.decompose()
+
+        # 텍스트 추출 및 정리
+        text = ' '.join(soup.stripped_strings)
+        text = ' '.join(text.split())
+
+        # 토큰 수 제한
+        tokens = self.encoding.encode(text)
+        if len(tokens) > self.max_tokens:
+            text = self.encoding.decode(tokens[:self.max_tokens])
+
+        return text
 
     def _call_openai_api(self, user_prompt: str) -> Response:
         """
