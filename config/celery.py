@@ -21,8 +21,13 @@ app.conf.beat_schedule = {
     "daily-insight-collection": {
         "task": "insights.tasks.daily_insight_collection",
         "schedule": crontab(hour=0, minute=0),  # 매일 자정에 실행
-        "args": (20,),  # 검색어 개수
+        "args": (10,),  # 검색어 개수
     },
+    "process_insights_to_structured_info": {
+        "task": "insights.tasks.process_insights_to_structured_info",
+        "schedule": crontab(day_of_week=1, hour=0, minute=0), # 매주 월요일 자정에 실행
+        "args": (),  # 인자 없음
+    }
 }
 
 @app.task(bind=True, ignore_result=True)
