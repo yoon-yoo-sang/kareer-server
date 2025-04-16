@@ -7,11 +7,11 @@ class SearchKeyword(BaseModel):
     keyword = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     last_searched_at = models.DateTimeField(null=True)
-    
+
     class Meta:
         db_table = "search_keywords"
         indexes = [
-            models.Index(fields=['is_active'], name='search_keywords_is_active_idx'),
+            models.Index(fields=["is_active"], name="search_keywords_is_active_idx"),
         ]
 
 
@@ -20,18 +20,18 @@ class Insight(BaseModel):
         VISA = "visa", "비자 정보"
         CULTURE = "culture", "문화 정보"
         INDUSTRY = "industry", "산업 정보"
-        
+
     search_word = models.CharField(max_length=255)
     category = models.CharField(max_length=50, choices=CategoryEnum.choices)
     content = models.TextField()
     source_url = models.CharField(max_length=512, unique=True)
-    
+
     class Meta:
         db_table = "insights"
         indexes = [
-            models.Index(fields=['category'], name='insights_category_idx'),
-            models.Index(fields=['search_word'], name='insights_search_word_idx'),
-            models.Index(fields=['source_url'], name='insights_source_url_idx'),
+            models.Index(fields=["category"], name="insights_category_idx"),
+            models.Index(fields=["search_word"], name="insights_search_word_idx"),
+            models.Index(fields=["source_url"], name="insights_source_url_idx"),
         ]
 
 
@@ -39,12 +39,12 @@ class VisaInfo(BaseModel):
     visa_type = models.CharField(max_length=50, unique=True)
     requirements = models.JSONField()
     process = models.JSONField()
-    duration = models.CharField(max_length=50)
+    duration = models.CharField(max_length=255)
 
     class Meta:
         db_table = "visa_info"
         indexes = [
-            models.Index(fields=['visa_type'], name='visa_type_idx'),
+            models.Index(fields=["visa_type"], name="visa_type_idx"),
         ]
 
 
@@ -71,7 +71,7 @@ class CultureInfo(BaseModel):
     class Meta:
         db_table = "culture_info"
         indexes = [
-            models.Index(fields=['culture_type'], name='culture_type_idx'),
+            models.Index(fields=["culture_type"], name="culture_type_idx"),
         ]
 
 
@@ -84,5 +84,5 @@ class IndustryInfo(BaseModel):
     class Meta:
         db_table = "industry_info"
         indexes = [
-            models.Index(fields=['industry_type'], name='industry_type_idx'),
+            models.Index(fields=["industry_type"], name="industry_type_idx"),
         ]

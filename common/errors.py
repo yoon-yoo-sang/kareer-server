@@ -17,6 +17,7 @@ class CrawlError(Exception):
     """
     크롤링 에러를 나타내는 예외 클래스입니다.
     """
+
     def __init__(self, message):
         super().__init__(message)
         self.message = message

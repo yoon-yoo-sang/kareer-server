@@ -19,6 +19,7 @@ class BaseCrawler(object):
     """
     Base class for crawlers.
     """
+
     async def crawl_async(self, url, client):
         """
         비동기로 URL을 크롤링합니다.

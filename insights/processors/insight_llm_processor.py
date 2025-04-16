@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 from openai import OpenAI
 
@@ -18,60 +18,66 @@ class InfoProcessor:
         response = self.client.responses.create(
             model=self.model,
             input=[
-                {"role": "system", "content": "비자 관련 정보를 구조화된 JSON으로 변환합니다. 여러 종류의 비자 정보를 배열 형태로 반환해주세요."},
+                {
+                    "role": "system",
+                    "content": "Convert visa-related information into structured JSON. Please return various types of visa information in array format.",
+                },
                 {"role": "user", "content": combined_content},
             ],
-            text={"format": {
-                "type": "json_schema",
-                "name": "VisaInfoList",
-                "schema": {
-                    "type": "object",
-                    "description": "비자 정보 목록",
-                    "properties": {
-                        "visa_list": {
-                            "type": "array",
-                            "description": "여러 비자 정보 목록",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "visa_type": {
-                                        "type": "string",
-                                        "description": "비자 종류"
-                                    },
-                                    "requirements": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
+            text={
+                "format": {
+                    "type": "json_schema",
+                    "name": "VisaInfoList",
+                    "schema": {
+                        "type": "object",
+                        "description": "Visa information list",
+                        "properties": {
+                            "visa_list": {
+                                "type": "array",
+                                "description": "List of various visa information",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "visa_type": {
+                                            "type": "string",
+                                            "description": "Type of Visa(name of visa only, e.g., E-2, F-4, etc.)",
                                         },
-                                        "description": "비자 신청 요건"
-                                    },
-                                    "process": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
+                                        "requirements": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "requirements for visa application",
                                         },
-                                        "description": "비자 신청 절차"
+                                        "process": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "process of visa application",
+                                        },
+                                        "duration": {
+                                            "type": "string",
+                                            "description": "duration of visa application",
+                                        },
                                     },
-                                    "duration": {
-                                        "type": "string",
-                                        "description": "비자 처리 기간"
-                                    }
+                                    "required": [
+                                        "visa_type",
+                                        "requirements",
+                                        "process",
+                                        "duration",
+                                    ],
+                                    "additionalProperties": False,
                                 },
-                                "required": ["visa_type", "requirements", "process", "duration"],
-                                "additionalProperties": False
                             }
-                        }
+                        },
+                        "required": ["visa_list"],
+                        "additionalProperties": False,
                     },
-                    "required": ["visa_list"],
-                    "additionalProperties": False
-                },
-                "strict": True
-            }}
+                    "strict": True,
+                }
+            },
         )
 
         try:
             result = json.loads(response.output_text)
-            return result.get('visa_list', [])
+            return result.get("visa_list", [])
         except json.JSONDecodeError:
             return []
 
@@ -82,64 +88,71 @@ class InfoProcessor:
         response = self.client.responses.create(
             model=self.model,
             input=[
-                {"role": "system", "content": "문화 관련 정보를 구조화된 JSON으로 변환합니다. 여러 종류의 문화 정보를 배열 형태로 반환해주세요."},
+                {
+                    "role": "system",
+                    "content": "Convert culture-related information into structured JSON. Please return various types of culture information in array format.",
+                },
                 {"role": "user", "content": combined_content},
             ],
-            text={"format": {
-                "type": "json_schema",
-                "name": "CultureInfoList",
-                "schema": {
-                    "type": "object",
-                    "description": "문화 정보 목록",
-                    "properties": {
-                        "culture_list": {
-                            "type": "array",
-                            "description": "여러 문화 정보 목록",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "culture_type": {
-                                        "type": "string",
-                                        "description": "문화 종류(business, daily, social, food, housing, transportation, entertainment 내에서 선택)"
-                                    },
-                                    "title": {
-                                        "type": "string",
-                                        "description": "제목"
-                                    },
-                                    "content": {
-                                        "type": "string",
-                                        "description": "내용"
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
+            text={
+                "format": {
+                    "type": "json_schema",
+                    "name": "CultureInfoList",
+                    "schema": {
+                        "type": "object",
+                        "description": "Culture information list",
+                        "properties": {
+                            "culture_list": {
+                                "type": "array",
+                                "description": "List of various culture information",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "culture_type": {
+                                            "type": "string",
+                                            "description": "Type of Culture(Select in {business, daily, social, food, housing, transportation, entertainment})",
                                         },
-                                        "description": "태그"
-                                    },
-                                    "source_urls": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": ["string"]
+                                        "title": {
+                                            "type": "string",
+                                            "description": "title",
                                         },
-                                        'description': '출처 URL'
-                                    }
+                                        "content": {
+                                            "type": "string",
+                                            "description": "content",
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "tags",
+                                        },
+                                        "source_urls": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "source urls",
+                                        },
+                                    },
+                                    "required": [
+                                        "culture_type",
+                                        "title",
+                                        "content",
+                                        "tags",
+                                        "source_urls",
+                                    ],
+                                    "additionalProperties": False,
                                 },
-                                'required': ['culture_type', 'title', 'content', 'tags', 'source_urls'],
-                                'additionalProperties': False
                             }
-                        }
+                        },
+                        "required": ["culture_list"],
+                        "additionalProperties": False,
                     },
-                    'required': ['culture_list'],
-                    'additionalProperties': False
-                },
-                'strict': True
-            }}
+                    "strict": True,
+                }
+            },
         )
 
         try:
             result = json.loads(response.output_text)
-            return result.get('culture_list', [])
+            return result.get("culture_list", [])
         except json.JSONDecodeError:
             return []
 
@@ -150,56 +163,66 @@ class InfoProcessor:
         response = self.client.responses.create(
             model=self.model,
             input=[
-                {"role": "system", "content": "산업 관련 정보를 구조화된 JSON으로 변환합니다. 여러 종류의 산업 정보를 배열 형태로 반환해주세요."},
+                {
+                    "role": "system",
+                    "content": "Convert industry-related information into structured JSON. Please return various types of industry information in array format.",
+                },
                 {"role": "user", "content": combined_content},
             ],
-            text={"format": {
-                "type": "json_schema",
-                "name": "IndustryInfoList",
-                "schema": {
-                    "type": "object",
-                    "description": "산업 정보 목록",
-                    "properties": {
-                        "industry_list": {
-                            "type": "array",
-                            "description": "여러 산업 정보 목록",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "industry_type": {
-                                        "type": "string",
-                                        "description": "산업 종류"
+            text={
+                "format": {
+                    "type": "json_schema",
+                    "name": "IndustryInfoList",
+                    "schema": {
+                        "type": "object",
+                        "description": "Industry information list",
+                        "properties": {
+                            "industry_list": {
+                                "type": "array",
+                                "description": "List of various industry information",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "industry_type": {
+                                            "type": "string",
+                                            "description": "Industry type (e.g., technology, healthcare, finance)",
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "Description of the industry",
+                                        },
+                                        "trends": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "trend of industry",
+                                        },
+                                        "opportunities": {
+                                            "type": "array",
+                                            "items": {"type": "string"},
+                                            "description": "opportunities in industry",
+                                        },
                                     },
-                                    "description": {
-                                        "type": "string",
-                                        "description": "산업 설명"
-                                    },
-                                    "trends": {
-                                        "type": "array",
-                                        'items': {'type': 'string'},
-                                        'description': '산업 트렌드'
-                                    },
-                                    'opportunities': {
-                                        'type': 'array',
-                                        'items': {'type': 'string'},
-                                        'description': '산업 기회'
-                                    }
+                                    "required": [
+                                        "industry_type",
+                                        "description",
+                                        "trends",
+                                        "opportunities",
+                                    ],
+                                    "additionalProperties": False,
                                 },
-                                'required': ['industry_type', 'description', 'trends', 'opportunities'],
-                                'additionalProperties': False
                             }
-                        }
+                        },
+                        "required": ["industry_list"],
+                        "additionalProperties": False,
                     },
-                    'required': ['industry_list'],
-                    'additionalProperties': False
-                },
-                'strict': True
-            }}
+                    "strict": True,
+                }
+            },
         )
 
         try:
             result = json.loads(response.output_text)
-            return result.get('industry_list', [])
+            return result.get("industry_list", [])
         except json.JSONDecodeError:
             return []
 

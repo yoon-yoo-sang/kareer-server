@@ -14,7 +14,12 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 class GptProcessor(BaseProcessor):
-    def __init__(self, model: str = "gpt-3.5-turbo", system_prompt: str = "You are a helpful assistant.", max_tokens: int = 4000):
+    def __init__(
+        self,
+        model: str = "gpt-3.5-turbo",
+        system_prompt: str = "You are a helpful assistant.",
+        max_tokens: int = 4000,
+    ):
         """
         Initialize the GptProcessor with the specified model.
         :param model: The model to use for processing.
@@ -47,20 +52,20 @@ class GptProcessor(BaseProcessor):
         :return: 전처리된 텍스트
         """
         # HTML 파싱
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, "html.parser")
 
         # 불필요한 태그 제거
-        for tag in soup(['script', 'style', 'meta', 'link', 'header', 'footer', 'nav']):
+        for tag in soup(["script", "style", "meta", "link", "header", "footer", "nav"]):
             tag.decompose()
 
         # 텍스트 추출 및 정리
-        text = ' '.join(soup.stripped_strings)
-        text = ' '.join(text.split())
+        text = " ".join(soup.stripped_strings)
+        text = " ".join(text.split())
 
         # 토큰 수 제한
         tokens = self.encoding.encode(text)
         if len(tokens) > self.max_tokens:
-            text = self.encoding.decode(tokens[:self.max_tokens])
+            text = self.encoding.decode(tokens[: self.max_tokens])
 
         return text
 
@@ -79,6 +84,6 @@ class GptProcessor(BaseProcessor):
                 user: {user_prompt}
                 ===========================
                 assistant:
-            """
+            """,
         )
         return response

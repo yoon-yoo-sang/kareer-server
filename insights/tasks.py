@@ -7,7 +7,8 @@ from django.db import transaction
 from django.utils import timezone
 
 from insights.crawlers.google_crawler import GoogleCrawler
-from insights.models import Insight, SearchKeyword, VisaInfo, CultureInfo, IndustryInfo
+from insights.models import (CultureInfo, IndustryInfo, Insight, SearchKeyword,
+                             VisaInfo)
 from insights.processors.html_llm_processor import GptProcessor
 from insights.processors.insight_llm_processor import InfoProcessor
 
@@ -19,16 +20,17 @@ def _categorize_insight(content: str) -> str:
     :return: 카테고리
     """
     gpt_processor = GptProcessor(
+        model="gpt-3.5-turbo",
         system_prompt="""
-        주어진 텍스트를 분석하여 다음 카테고리 중 하나로 분류해주세요:
-        - visa: 비자, 체류, 입국 관련 정보
-        - culture: 한국 문화, 생활, 관습 관련 정보
-        - industry: 산업, 기업, 경제 관련 정보
+        Classify the given text into one of the following categories:
+        - visa: Information related to visas, residence, and entry
+        - culture: Information related to Korean culture, lifestyle, and customs
+        - industry: Information related to industries, companies, and economy
         
-        응답은 카테고리 코드만 작성해주세요. (visa/culture/industry)
-        """
+        Please respond with only the category code. (visa/culture/industry)
+        """,
     )
-    
+
     category = gpt_processor.process(content).strip().lower()
     if category not in [choice[0] for choice in Insight.CategoryEnum.choices]:
         return Insight.CategoryEnum.INDUSTRY  # 기본값
@@ -47,29 +49,38 @@ def get_infos(search_word: str, num: int = 5) -> List[dict]:
     """
     google_crawler = GoogleCrawler()
     gpt_3_5_processor = GptProcessor(
+        model="gpt-3.5-turbo",
         system_prompt=f"""
-        HTML 내용을 읽고 검색어({search_word})와 관련된 내용을 추출해주세요.
-        """
+        Read the HTML content and extract information related to the search term ({search_word}).
+        """,
     )
     gpt_4_processor = GptProcessor(
         model="gpt-4",
         system_prompt=f"""
-        불필요한 내용은 제외하고, 핵심적인 정보만 추출해주세요.
-        한국에서 일하고 싶어하는 외국인에게 도움이 될만한 정보를 중심으로 추출해주세요.
-        """
+        Exclude unnecessary information and extract only the key points.
+        Focus on extracting information that would be helpful for foreigners who want to work in Korea.
+        """,
     )
 
-    crawl_templates = asyncio.run(google_crawler.google_crawl_async(search_word, num=num))
+    crawl_templates = asyncio.run(
+        google_crawler.google_crawl_async(search_word, num=num)
+    )
     insights = []
 
     with transaction.atomic():
         for template in crawl_templates:
             try:
+                if not template.html:
+                    continue
+
                 already_exist_insight = Insight.objects.filter(source_url=template.link)
                 already_exist_insight_exists = already_exist_insight.exists()
 
-                if already_exist_insight.exists() and \
-                    already_exist_insight.first().updated_at > timezone.now() - timedelta(days=30):
+                if (
+                    already_exist_insight.exists()
+                    and already_exist_insight.first().updated_at
+                    > timezone.now() - timedelta(days=30)
+                ):
                     continue
 
                 content = gpt_3_5_processor.process(template.html)
@@ -87,17 +98,19 @@ def get_infos(search_word: str, num: int = 5) -> List[dict]:
                         search_word=search_word,
                         category=category,
                         content=content,
-                        source_url=template.link
+                        source_url=template.link,
                     )
-                
-                insights.append({
-                    "id": insight.id,
-                    "search_word": insight.search_word,
-                    "category": insight.category,
-                    "content": insight.content,
-                    "source_url": insight.source_url
-                })
-                
+
+                insights.append(
+                    {
+                        "id": insight.id,
+                        "search_word": insight.search_word,
+                        "category": insight.category,
+                        "content": insight.content,
+                        "source_url": insight.source_url,
+                    }
+                )
+
             except Exception as e:
                 print(f"Error processing template {template}: {e}")
                 continue
@@ -112,25 +125,25 @@ def daily_insight_collection(num: int = 5) -> List[dict]:
     """
     keywords = SearchKeyword.objects.filter(is_active=True)
     results = []
-    
+
     for keyword in keywords:
         try:
             insights = get_infos(keyword.keyword, num=num)
             keyword.last_searched_at = timezone.now()
             keyword.save()
-            
-            results.append({
-                "keyword": keyword.keyword,
-                "insights_count": len(insights),
-                "status": "success"
-            })
+
+            results.append(
+                {
+                    "keyword": keyword.keyword,
+                    "insights_count": len(insights),
+                    "status": "success",
+                }
+            )
         except Exception as e:
-            results.append({
-                "keyword": keyword.keyword,
-                "error": str(e),
-                "status": "error"
-            })
-    
+            results.append(
+                {"keyword": keyword.keyword, "error": str(e), "status": "error"}
+            )
+
     return results
 
 
@@ -148,12 +161,12 @@ def process_insights_to_structured_info():
         for visa_data in visa_data_list:
             try:
                 VisaInfo.objects.update_or_create(
-                    visa_type=visa_data['visa_type'],
+                    visa_type=visa_data["visa_type"],
                     defaults={
-                        'requirements': visa_data['requirements'],
-                        'process': visa_data['process'],
-                        'duration': visa_data['duration']
-                    }
+                        "requirements": visa_data["requirements"],
+                        "process": visa_data["process"],
+                        "duration": visa_data["duration"],
+                    },
                 )
             except KeyError as e:
                 print(f"Error processing visa data: {e}")
@@ -168,13 +181,13 @@ def process_insights_to_structured_info():
         for culture_data in culture_data_list:
             try:
                 CultureInfo.objects.update_or_create(
-                    culture_type=culture_data['culture_type'],
+                    culture_type=culture_data["culture_type"],
                     defaults={
-                        'title': culture_data['title'],
-                        'content': culture_data['content'],
-                        'tags': culture_data['tags'],
-                        'source_urls': culture_data['source_urls'],
-                    }
+                        "title": culture_data["title"],
+                        "content": culture_data["content"],
+                        "tags": culture_data["tags"],
+                        "source_urls": culture_data["source_urls"],
+                    },
                 )
             except KeyError as e:
                 print(f"Error processing culture data: {e}")
@@ -189,14 +202,13 @@ def process_insights_to_structured_info():
         for industry_data in industry_data_list:
             try:
                 IndustryInfo.objects.update_or_create(
-                    industry_type=industry_data['industry_type'],
+                    industry_type=industry_data["industry_type"],
                     defaults={
-                        'description': industry_data['description'],
-                        'trends': industry_data['trends'],
-                        'opportunities': industry_data['opportunities'],
-                    }
+                        "description": industry_data["description"],
+                        "trends": industry_data["trends"],
+                        "opportunities": industry_data["opportunities"],
+                    },
                 )
             except KeyError as e:
                 print(f"Error processing industry data: {e}")
                 continue
-

@@ -57,8 +57,8 @@ class GoogleCrawler(BaseCrawler):
         :param google_response:
         :return:
         """
-        items = google_response['items']
-        links = [item['link'] for item in items]
+        items = google_response["items"]
+        links = [item["link"] for item in items]
         return links
 
     async def google_search_async(self, query: str, **params) -> dict:
@@ -68,11 +68,11 @@ class GoogleCrawler(BaseCrawler):
         :param params:
         :return:
         """
-        base_url = 'https://www.googleapis.com/customsearch/v1'
+        base_url = "https://www.googleapis.com/customsearch/v1"
         params = {
-            'key': self.api_key,
-            'cx': self.search_engine_id,
-            'q': query,
+            "key": self.api_key,
+            "cx": self.search_engine_id,
+            "q": query,
             **params,
         }
         async with httpx.AsyncClient() as client:
