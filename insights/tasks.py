@@ -153,62 +153,46 @@ def process_insights_to_structured_info():
     processor = InfoProcessor()
 
     # 비자 정보 처리
-    visa_insights = Insight.objects.filter(
-        category=Insight.CategoryEnum.VISA,
-    )
-    if visa_insights.exists():
-        visa_data_list = processor.process_visa_info(list(visa_insights))
-        for visa_data in visa_data_list:
-            try:
-                VisaInfo.objects.update_or_create(
-                    visa_type=visa_data["visa_type"],
-                    defaults={
-                        "requirements": visa_data["requirements"],
-                        "process": visa_data["process"],
-                        "duration": visa_data["duration"],
-                    },
-                )
-            except KeyError as e:
-                print(f"Error processing visa data: {e}")
-                continue
+    visa_data_list = processor.process_visa_info()
+    for visa_data in visa_data_list:
+        try:
+            VisaInfo.objects.update_or_create(
+                visa_type=visa_data["visa_type"],
+                defaults={
+                    "requirements": visa_data["requirements"],
+                    "process": visa_data["process"],
+                    "duration": visa_data["duration"],
+                },
+            )
+        except KeyError as e:
+            print(f"Error processing visa data: {e}")
+            continue
 
     # 문화 정보 처리
-    culture_insights = Insight.objects.filter(
-        category=Insight.CategoryEnum.CULTURE,
-    )
-    if culture_insights.exists():
-        culture_data_list = processor.process_culture_info(list(culture_insights))
-        for culture_data in culture_data_list:
-            try:
-                CultureInfo.objects.update_or_create(
-                    culture_type=culture_data["culture_type"],
-                    defaults={
-                        "title": culture_data["title"],
-                        "content": culture_data["content"],
-                        "tags": culture_data["tags"],
-                        "source_urls": culture_data["source_urls"],
-                    },
-                )
-            except KeyError as e:
-                print(f"Error processing culture data: {e}")
-                continue
+    culture_data_list = processor.process_culture_info()
+    for culture_data in culture_data_list:
+        try:
+            CultureInfo.objects.create(
+                culture_type=culture_data["culture_type"],
+                title=culture_data["title"],
+                content=culture_data["content"],
+                tags=culture_data["tags"],
+                source_urls=culture_data["source_urls"],
+            )
+        except KeyError as e:
+            print(f"Error processing culture data: {e}")
+            continue
 
     # 산업 정보 처리
-    industry_insights = Insight.objects.filter(
-        category=Insight.CategoryEnum.INDUSTRY,
-    )
-    if industry_insights.exists():
-        industry_data_list = processor.process_industry_info(list(industry_insights))
-        for industry_data in industry_data_list:
-            try:
-                IndustryInfo.objects.update_or_create(
-                    industry_type=industry_data["industry_type"],
-                    defaults={
-                        "description": industry_data["description"],
-                        "trends": industry_data["trends"],
-                        "opportunities": industry_data["opportunities"],
-                    },
-                )
-            except KeyError as e:
-                print(f"Error processing industry data: {e}")
-                continue
+    industry_data_list = processor.process_industry_info()
+    for industry_data in industry_data_list:
+        try:
+            IndustryInfo.objects.create(
+                industry_type=industry_data["industry_type"],
+                description=industry_data["description"],
+                trends=industry_data["trends"],
+                opportunities=industry_data["opportunities"],
+            )
+        except KeyError as e:
+            print(f"Error processing industry data: {e}")
+            continue

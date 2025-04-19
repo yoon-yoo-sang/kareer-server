@@ -61,7 +61,6 @@ class CultureInfo(BaseModel):
     culture_type = models.CharField(
         max_length=50,
         choices=CultureTypeEnum.choices,
-        unique=True,
     )
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -76,7 +75,7 @@ class CultureInfo(BaseModel):
 
 
 class IndustryInfo(BaseModel):
-    industry_type = models.CharField(max_length=50, unique=True)
+    industry_type = models.CharField(max_length=50)
     description = models.TextField()
     trends = models.JSONField()
     opportunities = models.JSONField()

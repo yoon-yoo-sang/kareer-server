@@ -34,6 +34,55 @@
 - **클라우드 서비스:** AWS (EC2, RDS, S3)
 - **모니터링:** Django Silk
 
+## 📁 프로젝트 구조
+
+```
+.
+├── authentication/         # 인증 관련 기능
+│   ├── admin.py
+│   ├── models.py
+│   ├── interfaces.py      # 인터페이스 정의
+│   ├── strategies.py      # 인증 전략 패턴
+│   ├── serializers.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── common/                # 공통 유틸리티
+│   ├── models.py
+│   ├── utils.py
+│   └── errors.py
+├── insights/             # AI 기반 인사이트 수집/제공
+│   ├── models.py
+│   ├── tasks.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── processors/       # GPT 기반 텍스트 처리
+│   └── crawlers/         # 데이터 수집
+├── users/                 # 사용자 관리
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── user_whole_career_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── jobs/                  # 채용 정보 관리
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── job_search_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+└── config/               # 프로젝트 설정
+    ├── asgi.py
+    ├── wsgi.py
+    ├── settings.py
+    └── urls.py
+```
+
 ## 🚀 시작하기
 
 ### 필수 요구사항
@@ -106,55 +155,6 @@ coverage run manage.py test
 coverage report
 ```
 
-## 📁 프로젝트 구조
-
-```
-.
-├── authentication/         # 인증 관련 기능
-│   ├── admin.py
-│   ├── models.py
-│   ├── interfaces.py      # 인터페이스 정의
-│   ├── strategies.py      # 인증 전략 패턴
-│   ├── serializers.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-├── common/                # 공통 유틸리티
-│   ├── models.py
-│   ├── utils.py
-│   └── errors.py
-├── insights/             # AI 기반 인사이트 수집/제공
-│   ├── models.py
-│   ├── tasks.py
-│   ├── tests.py
-│   ├── views.py
-│   ├── processors/       # GPT 기반 텍스트 처리
-│   └── crawlers/         # 데이터 수집
-├── users/                 # 사용자 관리
-│   ├── admin.py
-│   ├── models.py
-│   ├── serializers.py
-│   ├── services/
-│   │   └── user_whole_career_services.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-├── jobs/                  # 채용 정보 관리
-│   ├── admin.py
-│   ├── models.py
-│   ├── serializers.py
-│   ├── services/
-│   │   └── job_search_services.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-└── config/               # 프로젝트 설정
-    ├── asgi.py
-    ├── wsgi.py
-    ├── settings.py
-    └── urls.py
-```
-
 ## 🤝 기여하기
 
 1. Fork the Project
@@ -200,6 +200,55 @@ API and WebSocket server for Kareer, a platform helping foreigners find jobs in 
 - **CI/CD:** GitHub Actions
 - **Cloud Services:** AWS (EC2, RDS, S3)
 - **Monitoring:** Django Silk
+
+## 📁 Project Structure
+
+```
+.
+├── authentication/         # Authentication related features
+│   ├── admin.py
+│   ├── models.py
+│   ├── interfaces.py      # Interface definitions
+│   ├── strategies.py      # Authentication strategy patterns
+│   ├── serializers.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── common/                # Common utilities
+│   ├── models.py
+│   ├── utils.py
+│   └── errors.py
+├── insights/             # AI-powered insight collection/provision
+│   ├── models.py
+│   ├── tasks.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── processors/       # GPT-based text processing
+│   └── crawlers/         # Data collection
+├── users/                 # User management
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── user_whole_career_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+├── jobs/                  # Job posting management
+│   ├── admin.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── services/
+│   │   └── job_search_services.py
+│   ├── views.py
+│   ├── urls.py
+│   └── tests.py
+└── config/               # Project configuration
+    ├── asgi.py
+    ├── wsgi.py
+    ├── settings.py
+    └── urls.py
+```
 
 ## 🚀 Getting Started
 
@@ -271,55 +320,6 @@ python manage.py test
 # Run tests with coverage
 coverage run manage.py test
 coverage report
-```
-
-## 📁 Project Structure
-
-```
-.
-├── authentication/         # Authentication related features
-│   ├── admin.py
-│   ├── models.py
-│   ├── interfaces.py      # Interface definitions
-│   ├── strategies.py      # Authentication strategy patterns
-│   ├── serializers.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-├── common/                # Common utilities
-│   ├── models.py
-│   ├── utils.py
-│   └── errors.py
-├── insights/             # AI-powered insight collection/provision
-│   ├── models.py
-│   ├── tasks.py
-│   ├── tests.py
-│   ├── views.py
-│   ├── processors/       # GPT-based text processing
-│   └── crawlers/         # Data collection
-├── users/                 # User management
-│   ├── admin.py
-│   ├── models.py
-│   ├── serializers.py
-│   ├── services/
-│   │   └── user_whole_career_services.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-├── jobs/                  # Job posting management
-│   ├── admin.py
-│   ├── models.py
-│   ├── serializers.py
-│   ├── services/
-│   │   └── job_search_services.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
-└── config/               # Project configuration
-    ├── asgi.py
-    ├── wsgi.py
-    ├── settings.py
-    └── urls.py
 ```
 
 ## 🤝 Contributing
