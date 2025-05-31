@@ -235,6 +235,11 @@ class InfoProcessor:
             return []
 
     def _combine_insights(self, query: str) -> str:
+        """
+        인사이트를 결합하여 하나의 문자열로 반환합니다.
+        :param query:
+        :return:
+        """
         engine = create_engine(DATABASE_URL)
         loader = SQLDatabaseLoader(
             db=SQLDatabase(
