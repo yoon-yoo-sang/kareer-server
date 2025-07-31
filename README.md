@@ -4,7 +4,7 @@
 
 # Korean
 
-한국에서 직업을 찾는 외국인들을 위한 Kareer 플랫폼의 API 및 웹소켓 서버입니다. 현재 개발 진행 중이며 2025년 6월 출시를 목표로 하고 있습니다.
+한국에서 직업을 찾는 외국인들을 위한 Kareer 플랫폼의 API 및 웹소켓 서버입니다. 현재 개발 진행 중이며 2025년 9월 출시를 목표로 하고 있습니다.
 
 ## 🌟 주요 기능
 
@@ -173,7 +173,7 @@ coverage report
 
 # English
 
-API and WebSocket server for Kareer, a platform helping foreigners find jobs in Korea. Currently under development with a target launch date of June 2025.
+API and WebSocket server for Kareer, a platform helping foreigners find jobs in Korea. Currently under development with a target launch date of September 2025.
 
 ## 🌟 Features
 
